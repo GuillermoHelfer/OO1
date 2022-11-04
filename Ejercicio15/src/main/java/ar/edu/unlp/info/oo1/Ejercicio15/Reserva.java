@@ -35,6 +35,8 @@ public class Reserva {
 		this.inquilino = inquilino;
 	}
 	
-	
-	
+	public double calcularPrecio() {
+		return (propiedad.getPrecioPorNoche() * periodo.sizeInDays());
+	}
+		
 }

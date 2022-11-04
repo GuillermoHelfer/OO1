@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.oo1.Ejercicio15;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -64,5 +65,18 @@ public class Usuario {
 		return r;
 	}
 	
+	public void eliminarReserva(Reserva rese) {
+		reservaList.remove(rese);
+	}
+	
+	public List<Reserva> obtenerReservasEfectuadas(){
+		return reservaList;
+	}
+	
+	public double calcularIngresosPropietario(LocalDate f, LocalDate t) {
+		return propAlqList.stream()
+				.mapToDouble( r -> r.calcularingresosEntreDosFechas(f, t))
+				.sum();
+	}
 	
 }

@@ -1,5 +1,6 @@
 package ar.edu.unlp.info.oo1.Ejercicio15;
 
+import java.time.LocalDate;
 import java.util.LinkedList;
 
 public class Propiedad {
@@ -8,7 +9,7 @@ public class Propiedad {
 	private double precioPorNoche;
 	private String direccion;
 	private Usuario propietario;
-	private LinkedList<DateLapse> fecha;
+	private LinkedList<Reserva> reseList;
 	
 	public Propiedad(String nom, String des, Double pre, String dir, Usuario pro) {
 		setNombre(nom);
@@ -57,13 +58,26 @@ public class Propiedad {
 	public void setPropietario(Usuario propietario) {
 		this.propietario = propietario;
 	}
-
-	public DateLapse getFecha() {
-		return fecha;
+	
+	public boolean verificarDisponibilidad(DateLapse DL) {
+		return reseList.stream().anyMatch(reserva -> reserva.getPeriodo().overlaps(DL));
 	}
-
-	public void setFecha(DateLapse fecha) {
-		this.fecha = fecha;
+	
+	public void agregarReserva(DateLapse periodo, Usuario inquilino) {
+		if (verificarDisponibilidad(periodo))
+			this.reseList.add(new Reserva(this,periodo,inquilino));
+	}
+	
+	public void eliminarReserva(Reserva rese) {
+		reseList.remove(rese);
+	}
+	
+	public double calcularingresosEntreDosFechas (LocalDate from, LocalDate to) {
+		DateLapse DL = new DateLapse(from,to);
+		return reseList.stream()
+				.filter( rese -> DL.includesDate(rese.getPeriodo().getFrom()))
+				.mapToDouble( rese -> rese.calcularPrecio())
+				.sum();
 	}
 	
 }
